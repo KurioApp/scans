@@ -86,6 +86,100 @@ module.exports = {
     },
 
     /**
+     * Creates an output handler that writes output in the HTML format.
+     * @param {fs.WriteStream} stream The stream to write to or an object that
+     * obeys the writeable stream contract.
+     */
+    createHtml: function (stream) {
+        stream.write(`
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>CloudSploit Scans - Report</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css" rel="stylesheet">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            html { font-family: Helvetica; font-size: 12px; }
+            footer { font-size: 11px; }
+        </style>
+    </head>
+    <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var $table = $('table').tablesorter({
+                theme: 'bootstrap',
+                widgets: ["zebra", "filter", "columns"],
+                widgetOptions : {
+                    zebra : ["even", "odd"],
+                    filter_columnFilters: true,
+                    filter_cssFilter: [
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control custom-select',
+                        'form-control'
+                    ]
+                }
+            });
+        });
+    </script>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark"> <tr>
+            <th>Category</th>
+            <th>Title</th>
+            <th>Resource</th>
+            <th>Region</th>
+            <th class="filter-select filter-exact" data-placeholder="Pick Status">Status</th>
+            <th>Message</th>
+        </tr> </thead>
+        <tbody>
+        `);
+
+        return {
+            stream: stream,
+
+            startCompliance: function(plugin, pluginKey, compliance) {
+            },
+
+            endCompliance: function(plugin, pluginKey, compliance) {
+            },
+
+            writeResult: function (result, plugin, pluginKey) {
+                var statusWord;
+                if (result.status === 0) {
+                    statusWord = 'OK';
+                } else if (result.status === 1) {
+                    statusWord = 'WARN';
+                } else if (result.status === 2) {
+                    statusWord = 'FAIL';
+                } else {
+                    statusWord = 'UNKNOWN';
+                }
+
+                this.stream.write(
+                `<tr><td>${plugin.category}</td><td>${plugin.title}</td><td>${result.resource || 'N/A'}</td><td>${result.region || 'Global'}</td><td>${statusWord}</td><td>${result.message}</td></tr>`);
+                },
+
+            close: function () {
+                this.stream.write(`
+        </tbody>
+    </table>
+    </body>
+</html>`
+                );
+                this.stream.end();
+            }
+        }
+    },
+
+    /**
      * Creates an output handler that writes output in the JSON format.
      * @param {fs.WriteSteam} stream The stream to write to or an object that
      * obeys the writeable stream contract.
@@ -319,6 +413,14 @@ module.exports = {
         if (addCsvOutput) {
             var stream = fs.createWriteStream(addCsvOutput.substr(6));
             outputs.push(this.createCsv(stream));
+        }
+
+        var addHtmlOutput = argv.find(function (arg) {
+            return arg.startsWith('--html=');
+        })
+        if (addHtmlOutput) {
+            var stream = fs.createWriteStream(addHtmlOutput.substr(7));
+            outputs.push(this.createHtml(stream));
         }
 
         var addJunitOutput = argv.find(function (arg) {
