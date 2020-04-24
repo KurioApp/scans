@@ -14,4 +14,4 @@ async function uploadFile() {
     console.log(`${filename} uploaded to ${bucketName}.`);
 }
 
-uploadFile().catch(console.error)
+uploadFile().catch(console.error);
