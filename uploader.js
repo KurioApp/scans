@@ -1,17 +1,28 @@
 const {Storage} = require('@google-cloud/storage');
-const storage = new Storage();
-const filename = process.argv.slice(2);
+const path = require('path');
 
+const storage = new Storage();
+
+if(process.argv.length < 3){
+    console.log("Need file to upload");
+    process.exit(1);
+}
+const fileName = process.argv[2];
 const bucketName = process.env.BUCKET_NAME;
+const uploadDir = process.env.UPLOAD_DIR;
+
+var destination = fileName;
+if(uploadDir){
+    destination = path.join(uploadDir, fileName);
+}
 
 async function uploadFile() {
-    // Uploads a local file to the bucket
-    await storage.bucket(bucketName).upload(filename, {
-        // Support for HTTP requests made with `Accept-Encoding: gzip`
-        gzip: true
+    await storage.bucket(bucketName).upload(fileName, {
+        gzip: true,
+        destination: destination,
     });
 
-    console.log(`${filename} uploaded to ${bucketName}.`);
+    console.log(`${fileName} uploaded to ${bucketName}.`);
 }
 
 uploadFile().catch(console.error);
