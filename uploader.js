@@ -22,13 +22,9 @@ if(uploadDir){
     destination = path.join(uploadDir, fileName);
 }
 
-async function uploadFile() {
-    await storage.bucket(bucketName).upload(fileName, {
-        gzip: true,
-        destination: destination,
-    });
-
+storage.bucket(bucketName).upload(fileName, {
+    gzip: true,
+    destination: destination,
+}).then(() => {
     console.log(`${fileName} uploaded to ${bucketName}.`);
-}
-
-uploadFile().catch(console.error);
+}).catch(console.error);
