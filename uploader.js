@@ -17,7 +17,7 @@ if(!bucketName){
     process.exit(1);
 }
 
-var destination = fileName;
+let destination = fileName;
 if(uploadDir){
     destination = path.join(uploadDir, fileName);
 }
