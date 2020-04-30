@@ -46,11 +46,6 @@ let messageBody = {
     ]
 };
 
-
-if (!webhookUrl) {
-    console.error('Please fill in your Webhook URL');
-}
-
 console.log('Sending slack message');
 
 request({
