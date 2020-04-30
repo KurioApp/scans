@@ -2,5 +2,6 @@
 
 current_time=$(date "+%Y.%m.%d-%H.%M")
 
-npm index.js --html=./cloudsploit_$current_time.html
-npm uploader.js ./cloudsploit_$current_time.html
+node index.js --html=./cloudsploit_$current_time.html && \
+node uploader.js cloudsploit_$current_time.html && \
+node slack.js cloudsploit_$current_time.html
