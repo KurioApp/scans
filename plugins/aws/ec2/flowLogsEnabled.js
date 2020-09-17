@@ -15,7 +15,8 @@ module.exports = {
                 'containing HIPAA data. Flow Logs should be enabled to satisfy ' +
                 'the audit controls of the HIPAA framework.',
         pci: 'PCI requires logging of all network access to environments containing ' +
-             'cardholder data. Enable VPC flow logs to log these network requests.'
+             'cardholder data. Enable VPC flow logs to log these network requests.',
+        cis2: '2.9 Ensure VPC flow logging is enabled in all VPCs'
     },
 
     run: function(cache, settings, callback) {
@@ -42,7 +43,7 @@ module.exports = {
 
             var vpcMap = {};
 
-            for (i in describeVpcs.data) {
+            for (var i in describeVpcs.data) {
                 if (!describeVpcs.data[i].VpcId) continue;
                 vpcMap[describeVpcs.data[i].VpcId] = [];
             }
@@ -57,7 +58,7 @@ module.exports = {
             }
 
             // Now lookup flow logs and map to VPCs
-            for (f in describeFlowLogs.data) {
+            for (var f in describeFlowLogs.data) {
                 if (describeFlowLogs.data[f].ResourceId &&
                     vpcMap[describeFlowLogs.data[f].ResourceId]) {
                     vpcMap[describeFlowLogs.data[f].ResourceId].push(describeFlowLogs.data[f]);
@@ -65,14 +66,14 @@ module.exports = {
             }
 
             // Loop through VPCs and add results
-            for (v in vpcMap) {
+            for (var v in vpcMap) {
                 if (!vpcMap[v].length) {
                     helpers.addResult(results, 2, 'VPC flow logs are not enabled', region, v);
                 } else {
                     var activeLogs = false;
 
-                    for (f in vpcMap[v]) {
-                        if (vpcMap[v][f].FlowLogStatus == 'ACTIVE') {
+                    for (var w in vpcMap[v]) {
+                        if (vpcMap[v][w].FlowLogStatus == 'ACTIVE') {
                             activeLogs = true;
                             break;
                         }

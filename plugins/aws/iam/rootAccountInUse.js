@@ -15,7 +15,8 @@ module.exports = {
                 'should not be used.',
         pci: 'PCI requires that cardholder data can only be accessed by those with ' +
              'a legitimate business need. Restricting root access prevents access ' +
-             'to these environments from users who may not be identified.'
+             'to these environments from users who may not be identified.',
+        cis1: '1.1 Avoid the use of the root account'
     },
     settings: {
         root_account_in_use_days: {
@@ -27,7 +28,7 @@ module.exports = {
     },
 
     run: function(cache, settings, callback) {
-        this._run(cache, settings, callback, new Date())
+        this._run(cache, settings, callback, new Date());
     },
 
     _run: function(cache, settings, callback, now) {
@@ -43,7 +44,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var generateCredentialReport = helpers.addSource(cache, source,
-                ['iam', 'generateCredentialReport', region]);
+            ['iam', 'generateCredentialReport', region]);
 
         if (!generateCredentialReport) return callback(null, results, source);
 
@@ -55,7 +56,7 @@ module.exports = {
 
         var found = false;
 
-        for (r in generateCredentialReport.data) {
+        for (var r in generateCredentialReport.data) {
             var obj = generateCredentialReport.data[r];
 
             if (obj && obj.user === '<root_account>') {

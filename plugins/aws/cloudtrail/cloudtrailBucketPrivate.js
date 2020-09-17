@@ -9,6 +9,9 @@ module.exports = {
     recommended_action: 'Set the S3 bucket access policy for all CloudTrail buckets to only allow known users to access its files.',
     link: 'http://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html',
     apis: ['CloudTrail:describeTrails', 'S3:getBucketAcl'],
+    compliance: {
+        cis1: '2.3 Ensure the S3 bucket used to store CloudTrail logs is not publicly accessible'
+    },
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -46,14 +49,14 @@ module.exports = {
                 if (!getBucketAcl || getBucketAcl.err || !getBucketAcl.data) {
                     helpers.addResult(results, 3,
                         'Error querying for bucket policy for bucket: ' + trail.S3BucketName + ': ' + helpers.addError(getBucketAcl),
-                        region, 'arn:aws:s3:::' + trail.S3BucketName)
+                        region, 'arn:aws:s3:::' + trail.S3BucketName);
 
                     return cb();
                 }
 
                 var allowsAllUsersTypes = [];
 
-                for (i in getBucketAcl.data.Grants) {
+                for (var i in getBucketAcl.data.Grants) {
                     if (getBucketAcl.data.Grants[i].Grantee.Type &&
                         getBucketAcl.data.Grants[i].Grantee.Type === 'Group' &&
                         getBucketAcl.data.Grants[i].Grantee.URI &&

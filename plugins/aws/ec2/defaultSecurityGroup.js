@@ -13,7 +13,8 @@ module.exports = {
         pci: 'PCI has strict requirements to segment networks using firewalls. ' +
              'Security groups are a software-layer firewall that should be used ' +
              'to isolate resources. Ensure default security groups to not allow ' +
-             'unintended traffic to cross these isolation boundaries.'
+             'unintended traffic to cross these isolation boundaries.',
+        cis2: '4.3 Ensure the default security group of every VPC restricts all traffic'
     },
 
     run: function(cache, settings, callback) {
@@ -38,7 +39,7 @@ module.exports = {
                 return rcb();
             }
 
-            for (s in describeSecurityGroups.data) {
+            for (var s in describeSecurityGroups.data) {
                 var sg = describeSecurityGroups.data[s];
                 // arn:aws:ec2:region:account-id:security-group/security-group-id
                 var resource = 'arn:aws:ec2:' + region + ':' + sg.OwnerId + ':security-group/' + sg.GroupId;

@@ -11,7 +11,8 @@ module.exports = {
     apis: ['IAM:generateCredentialReport'],
     compliance: {
         pci: 'PCI requires that all users be removed if they are inactive for 90 days. ' +
-             'If a user access key is inactive, it should be removed.'
+             'If a user access key is inactive, it should be removed.',
+        cis1: '1.3 Ensure credentials unused for 90 days or greater are disabled'
     },
     settings: {
         access_keys_last_used_fail: {
@@ -42,7 +43,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var generateCredentialReport = helpers.addSource(cache, source,
-                ['iam', 'generateCredentialReport', region]);
+            ['iam', 'generateCredentialReport', region]);
 
         if (!generateCredentialReport) return callback(null, results, source);
 
