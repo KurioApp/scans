@@ -42,6 +42,7 @@ parser.add_argument('--china', {
 parser.add_argument('--csv', { help: 'Output: CSV file' });
 parser.add_argument('--json', { help: 'Output: JSON file' });
 parser.add_argument('--junit', { help: 'Output: Junit file' });
+parser.add_argument('--html', {help: 'Output: HTML file' });
 parser.add_argument('--console', {
     help: 'Console output format. Default: table',
     choices: ['none', 'text', 'table'],
@@ -152,6 +153,7 @@ if (config.credentials.aws.credential_file) {
 } else if (config.credentials.google.credential_file) {
     settings.cloud = 'google';
     cloudConfig = loadHelperFile(config.credentials.google.credential_file);
+    cloudConfig.project = cloudConfig.project_id;
 } else if (config.credentials.google.project) {
     settings.cloud = 'google';
     checkRequiredKeys(config.credentials.google, ['client_email', 'private_key']);

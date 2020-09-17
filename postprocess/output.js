@@ -114,7 +114,7 @@ module.exports = {
      * @param {fs.WriteStream} stream The stream to write to or an object that
      * obeys the writeable stream contract.
      */
-    createHtml: function (stream) {
+    createHtml: function (stream, settings) {
         stream.write(`
 <!DOCTYPE html>
 <html>
@@ -199,6 +199,7 @@ module.exports = {
 </html>`
                 );
                 this.stream.end();
+                log(`INFO: HTML file written to ${settings.html}`, settings);
             }
         }
     },
@@ -460,12 +461,9 @@ module.exports = {
             outputs.push(this.createCsv(stream, settings));
         }
 
-        var addHtmlOutput = argv.find(function (arg) {
-            return arg.startsWith('--html=');
-        })
-        if (addHtmlOutput) {
-            var stream = fs.createWriteStream(addHtmlOutput.substr(7));
-            outputs.push(this.createHtml(stream));
+        if (settings.html) {
+            var streamHtml = fs.createWriteStream(settings.html);
+            outputs.push(this.createHtml(streamHtml, settings));
         }
 
         if (settings.junit) {
