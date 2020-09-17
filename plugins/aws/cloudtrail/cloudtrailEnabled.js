@@ -11,11 +11,12 @@ module.exports = {
     apis: ['CloudTrail:describeTrails', 'CloudTrail:getTrailStatus'],
     compliance: {
         hipaa: 'HIPAA has clearly defined audit requirements for environments ' +
-        'containing sensitive data. CloudTrail is the recommended ' +
-        'logging and auditing solution for AWS since it is tightly ' +
-        'integrated into most AWS services and APIs.',
-    pci: 'CloudTrail logs satisfy the PCI requirement to log all account activity ' +
-         'within environments containing cardholder data.'
+            'containing sensitive data. CloudTrail is the recommended ' +
+            'logging and auditing solution for AWS since it is tightly ' +
+            'integrated into most AWS services and APIs.',
+        pci: 'CloudTrail logs satisfy the PCI requirement to log all account activity ' +
+            'within environments containing cardholder data.',
+        cis1: '2.1 Ensure CloudTrail is enabled in all regions'
     },
     run: function(cache, settings, callback) {
         var results = [];
@@ -43,7 +44,7 @@ module.exports = {
                 // Ensure logging is enabled
                 var found;
 
-                for (t in describeTrails.data) {
+                for (var t in describeTrails.data) {
                     var trail = describeTrails.data[t];
 
                     if (trail.IncludeGlobalServiceEvents) {

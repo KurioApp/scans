@@ -8,9 +8,15 @@ module.exports = {
     link: 'http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html',
     recommended_action: 'Increase the minimum length requirement for the password policy',
     apis: ['IAM:getAccountPasswordPolicy'],
+    remediation_description: 'The password policy for minimum password length will be set to the value set by the user. Otherwise, it will default to 14.',
+    remediation_min_version: '202006221808',
+    apis_remediate: ['IAM:getAccountPasswordPolicy'],
+    actions: {remediate: ['IAM:updateAccountPasswordPolicy'], rollback: ['IAM:updateAccountPasswordPolicy']},
+    permissions: {remediate: ['iam:UpdateAccountPasswordPolicy'], rollback: ['iam:UpdateAccountPasswordPolicy']},
     compliance: {
         pci: 'PCI requires that passwords have a minimum length of at least 7 characters. ' +
-             'Setting an IAM password length policy enforces this requirement.'
+             'Setting an IAM password length policy enforces this requirement.',
+        cis1: '1.9 Ensure IAM password policy requires minimum length of 14 or greater'
     },
     settings: {
         min_password_length_fail: {
@@ -41,7 +47,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var getAccountPasswordPolicy = helpers.addSource(cache, source,
-                ['iam', 'getAccountPasswordPolicy', region]);
+            ['iam', 'getAccountPasswordPolicy', region]);
 
         if (!getAccountPasswordPolicy) return callback(null, results, source);
 
@@ -72,5 +78,20 @@ module.exports = {
         }
 
         callback(null, results, source);
+    },
+    remediate: function(config, cache, settings, resource, callback) {
+        var remediation_file = settings.remediation_file;
+        var putCall = this.actions.remediate;
+        var pluginName = 'minPasswordLength';
+        var passwordKey = 'MinimumPasswordLength';
+        var input = {};
+        if (settings.input && settings.input['minPasswordLength']) {
+            input[passwordKey] = `${settings.input['minPasswordLength']}`;
+        } else {
+            input[passwordKey] = '14';
+
+        }
+
+        helpers.remediatePasswordPolicy(putCall, pluginName, remediation_file, passwordKey, config, cache, settings, resource, input, callback);
     }
 };

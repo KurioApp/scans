@@ -9,6 +9,9 @@ module.exports = {
     recommended_action: 'Enable CloudTrail log encryption through the CloudTrail console or API',
     link: 'http://docs.aws.amazon.com/awscloudtrail/latest/userguide/encrypting-cloudtrail-log-files-with-aws-kms.html',
     apis: ['CloudTrail:describeTrails'],
+    compliance: {
+        cis2: '2.7 Ensure CloudTrail logs are encrypted at rest using KMS CMKs'
+    },
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -30,14 +33,14 @@ module.exports = {
             if (!describeTrails.data.length) {
                 helpers.addResult(results, 2, 'CloudTrail is not enabled', region);
             } else if (describeTrails.data[0]) {
-                for (t in describeTrails.data) {
+                for (var t in describeTrails.data) {
                     if (describeTrails.data[t].S3BucketName == helpers.CLOUDSPLOIT_EVENTS_BUCKET) continue;
                     if (!describeTrails.data[t].KmsKeyId) {
                         helpers.addResult(results, 2, 'CloudTrail encryption is not enabled',
-                            region, describeTrails.data[t].TrailARN)
+                            region, describeTrails.data[t].TrailARN);
                     } else {
                         helpers.addResult(results, 0, 'CloudTrail encryption is enabled',
-                            region, describeTrails.data[t].TrailARN)
+                            region, describeTrails.data[t].TrailARN);
                     }
                 }
             } else {

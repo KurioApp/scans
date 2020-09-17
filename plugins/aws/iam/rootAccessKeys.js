@@ -12,7 +12,8 @@ module.exports = {
         hipaa: 'HIPAA requires strong auditing controls surrounding actions ' +
                 'taken in the environment. The root user lacks these controls ' +
                 'since it is not tied to a specific user. The root access keys ' +
-                'should not be used.'
+                'should not be used.',
+        cis1: '1.12 Ensure no root account access key exists'
     },
 
     run: function(cache, settings, callback) {
@@ -22,7 +23,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var generateCredentialReport = helpers.addSource(cache, source,
-                ['iam', 'generateCredentialReport', region]);
+            ['iam', 'generateCredentialReport', region]);
 
         if (!generateCredentialReport) return callback(null, results, source);
 
@@ -34,7 +35,7 @@ module.exports = {
 
         var found = false;
 
-        for (r in generateCredentialReport.data) {
+        for (var r in generateCredentialReport.data) {
             var obj = generateCredentialReport.data[r];
 
             if (obj && obj.user === '<root_account>') {

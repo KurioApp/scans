@@ -9,6 +9,9 @@ module.exports = {
     link: 'http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#use-groups-for-permissions',
     recommended_action: 'Create groups with the required policies, move the IAM users to the applicable groups, and then remove the inline and directly attached policies from the IAM user.',
     apis: ['IAM:listUsers', 'IAM:listUserPolicies', 'IAM:listAttachedUserPolicies'],
+    compliance: {
+        cis1: '1.16 Ensure IAM policies are attached only to groups or roles'
+    },
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -17,7 +20,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var listUsers = helpers.addSource(cache, source,
-                ['iam', 'listUsers', region]);
+            ['iam', 'listUsers', region]);
 
         if (!listUsers) return callback(null, results, source);
 
@@ -33,15 +36,13 @@ module.exports = {
         }
 
         async.each(listUsers.data, function(user, cb){
-            var goodUser = true;
-
             if (!user.UserName) return cb();
 
             var listAttachedUserPolicies = helpers.addSource(cache, source,
-                    ['iam', 'listAttachedUserPolicies', region, user.UserName]);
+                ['iam', 'listAttachedUserPolicies', region, user.UserName]);
 
             var listUserPolicies = helpers.addSource(cache, source,
-                    ['iam', 'listUserPolicies', region, user.UserName]);
+                ['iam', 'listUserPolicies', region, user.UserName]);
 
             if (!listAttachedUserPolicies) return cb();
             if (!listUserPolicies) return cb();

@@ -8,9 +8,15 @@ module.exports = {
     link: 'http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html',
     recommended_action: 'Update the password policy to require the use of numbers',
     apis: ['IAM:getAccountPasswordPolicy'],
+    remediation_description: 'The password policy for password requires numbers will be set to true.',
+    remediation_min_version: '202006221808',
+    apis_remediate: ['IAM:getAccountPasswordPolicy'],
+    actions: {remediate: ['IAM:updateAccountPasswordPolicy'], rollback: ['IAM:updateAccountPasswordPolicy']},
+    permissions: {remediate: ['iam:UpdateAccountPasswordPolicy'], rollback: ['iam:UpdateAccountPasswordPolicy']},
     compliance: {
         pci: 'PCI requires a strong password policy. Setting IAM password ' +
-             'requirements enforces this policy.'
+             'requirements enforces this policy.',
+        cis1: '1.8 Ensure IAM password policy require at least one number'
     },
 
     run: function(cache, settings, callback) {
@@ -20,7 +26,7 @@ module.exports = {
         var region = helpers.defaultRegion(settings);
 
         var getAccountPasswordPolicy = helpers.addSource(cache, source,
-                ['iam', 'getAccountPasswordPolicy', region]);
+            ['iam', 'getAccountPasswordPolicy', region]);
 
         if (!getAccountPasswordPolicy) return callback(null, results, source);
 
@@ -47,5 +53,15 @@ module.exports = {
         }
 
         callback(null, results, source);
+    },
+    remediate: function(config, cache, settings, resource, callback) {
+        var remediation_file = settings.remediation_file;
+        var putCall = this.actions.remediate;
+        var pluginName = 'passwordRequiresNumbers';
+        var passwordKey = 'RequireNumbers';
+        var input = {};
+        input[passwordKey] = true;
+
+        helpers.remediatePasswordPolicy(putCall, pluginName, remediation_file, passwordKey, config, cache, settings, resource, input, callback);
     }
 };

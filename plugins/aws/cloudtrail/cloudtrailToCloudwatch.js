@@ -9,6 +9,9 @@ module.exports = {
     recommended_action: 'Enable CloudTrail CloudWatch integration for all regions',
     link: 'http://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html',
     apis: ['CloudTrail:describeTrails'],
+    compliance: {
+        cis1: '2.4 Ensure CloudTrail trails are integrated with CloudWatch Logs'
+    },
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -30,14 +33,14 @@ module.exports = {
             if (!describeTrails.data.length) {
                 helpers.addResult(results, 2, 'CloudTrail is not enabled', region);
             } else if (describeTrails.data[0]) {
-                for (t in describeTrails.data) {
+                for (var t in describeTrails.data) {
                     if (describeTrails.data[t].S3BucketName == helpers.CLOUDSPLOIT_EVENTS_BUCKET) continue;
                     if (!describeTrails.data[t].CloudWatchLogsLogGroupArn) {
                         helpers.addResult(results, 2, 'CloudTrail CloudWatch integration is not enabled',
-                            region, describeTrails.data[t].TrailARN)
+                            region, describeTrails.data[t].TrailARN);
                     } else {
                         helpers.addResult(results, 0, 'CloudTrail CloudWatch integration is enabled',
-                            region, describeTrails.data[t].TrailARN)
+                            region, describeTrails.data[t].TrailARN);
                     }
                 }
             } else {

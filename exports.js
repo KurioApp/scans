@@ -5,6 +5,9 @@ module.exports = {
         'acmValidation'                 : require(__dirname + '/plugins/aws/acm/acmValidation.js'),
         'acmCertificateExpiry'          : require(__dirname + '/plugins/aws/acm/acmCertificateExpiry.js'),
         'asgMultiAz'                    : require(__dirname + '/plugins/aws/autoscaling/asgMultiAz.js'),
+        'asgActiveNotifications'        : require(__dirname + '/plugins/aws/autoscaling/asgActiveNotifications.js'),
+        'emptyASG'                      : require(__dirname + '/plugins/aws/autoscaling/emptyASG.js'),
+        'asgMissingELB'                 : require(__dirname + '/plugins/aws/autoscaling/asgMissingELB.js'),
         'workgroupEncrypted'            : require(__dirname + '/plugins/aws/athena/workgroupEncrypted.js'),
         'workgroupEnforceConfiguration' : require(__dirname + '/plugins/aws/athena/workgroupEnforceConfiguration.js'),
         'publicS3Origin'                : require(__dirname + '/plugins/aws/cloudfront/publicS3Origin.js'),
@@ -13,6 +16,11 @@ module.exports = {
         'cloudfrontHttpsOnly'           : require(__dirname + '/plugins/aws/cloudfront/cloudfrontHttpsOnly.js'),
         'cloudfrontLoggingEnabled'      : require(__dirname + '/plugins/aws/cloudfront/cloudfrontLoggingEnabled.js'),
         'cloudfrontWafEnabled'          : require(__dirname + '/plugins/aws/cloudfront/cloudfrontWafEnabled.js'),
+        
+        'volumeEncryption'              : require(__dirname + '/plugins/aws/comprehend/volumeEncryption.js'),
+        'outputResultEncryption'        : require(__dirname + '/plugins/aws/comprehend/outputResultEncryption.js'),
+
+        'plainTextParameters'           :  require(__dirname + '/plugins/aws/cloudformation/plainTextParameters.js'),
 
         'cloudtrailBucketAccessLogging' : require(__dirname + '/plugins/aws/cloudtrail/cloudtrailBucketAccessLogging.js'),
         'cloudtrailBucketDelete'        : require(__dirname + '/plugins/aws/cloudtrail/cloudtrailBucketDelete.js'),
@@ -27,8 +35,10 @@ module.exports = {
         'dmsEncryptionEnabled'          : require(__dirname + '/plugins/aws/dms/dmsEncryptionEnabled.js'),
 
         'dynamoKmsEncryption'           : require(__dirname + '/plugins/aws/dynamodb/dynamoKmsEncryption.js'),
+        'daxClusterEncryption'          : require(__dirname + '/plugins/aws/dynamodb/daxClusterEncryption.js'),
 
         'defaultSecurityGroup'          : require(__dirname + '/plugins/aws/ec2/defaultSecurityGroup.js'),
+        'launchWizardSecurityGroups'    : require(__dirname + '/plugins/aws/ec2/launchWizardSecurityGroups'),
         'elasticIpLimit'                : require(__dirname + '/plugins/aws/ec2/elasticIpLimit.js'),
         'subnetIpAvailability'          : require(__dirname + '/plugins/aws/ec2/subnetIpAvailability.js'),
         'excessiveSecurityGroups'       : require(__dirname + '/plugins/aws/ec2/excessiveSecurityGroups.js'),
@@ -39,6 +49,7 @@ module.exports = {
         'openAllPortsProtocols'         : require(__dirname + '/plugins/aws/ec2/openAllPortsProtocols.js'),
         'openCIFS'                      : require(__dirname + '/plugins/aws/ec2/openCIFS.js'),
         'openDNS'                       : require(__dirname + '/plugins/aws/ec2/openDNS.js'),
+        'openDocker'                    : require(__dirname + '/plugins/aws/ec2/openDocker.js'),
         'openFTP'                       : require(__dirname + '/plugins/aws/ec2/openFTP.js'),
         'openHadoopNameNode'            : require(__dirname + '/plugins/aws/ec2/openHadoopNameNode.js'),
         'openHadoopNameNodeWebUI'       : require(__dirname + '/plugins/aws/ec2/openHadoopNameNodeWebUI.js'),
@@ -70,16 +81,20 @@ module.exports = {
         'ebsSnapshotPrivate'            : require(__dirname + '/plugins/aws/ec2/ebsSnapshotPrivate.js'),
         'natMultiAz'                    : require(__dirname + '/plugins/aws/ec2/natMultiAz.js'),
         'defaultVpcInUse'               : require(__dirname + '/plugins/aws/ec2/defaultVpcInUse.js'),
-        'defaultVpcExists'               : require(__dirname + '/plugins/aws/ec2/defaultVpcExists.js'),
+        'defaultVpcExists'              : require(__dirname + '/plugins/aws/ec2/defaultVpcExists.js'),
         'crossVpcPublicPrivate'         : require(__dirname + '/plugins/aws/ec2/crossVpcPublicPrivate.js'),
+        'vpcEndpointAcceptance'         : require(__dirname + '/plugins/aws/ec2/vpcEndpointAcceptance'),
         'ebsEncryptedSnapshots'         : require(__dirname + '/plugins/aws/ec2/ebsEncryptedSnapshots.js'),
-        'ec2MetadataOptions'             : require(__dirname + '/plugins/aws/ec2/ec2MetadataOptions.js'),
+        'ebsUnusedVolumes'              : require(__dirname + '/plugins/aws/ec2/ebsUnusedVolumes.js'),
+        'ec2MetadataOptions'            : require(__dirname + '/plugins/aws/ec2/ec2MetadataOptions.js'),
 
         'efsEncryptionEnabled'          : require(__dirname + '/plugins/aws/efs/efsEncryptionEnabled.js'),
 
         'ecrRepositoryPolicy'           : require(__dirname + '/plugins/aws/ecr/ecrRepositoryPolicy.js'),
         'ecrRepositoryTagImmutability'  : require(__dirname + '/plugins/aws/ecr/ecrRepositoryTagImmutability.js'),
-
+        
+        'managedPlatformUpdates'        : require(__dirname + '/plugins/aws/elasticbeanstalk/managedPlatformUpdates.js'),
+        
         'eksKubernetesVersion'          : require(__dirname + '/plugins/aws/eks/eksKubernetesVersion.js'),
         'eksLoggingEnabled'             : require(__dirname + '/plugins/aws/eks/eksLoggingEnabled.js'),
         'eksPrivateEndpoint'            : require(__dirname + '/plugins/aws/eks/eksPrivateEndpoint.js'),
@@ -96,6 +111,7 @@ module.exports = {
         'elbv2WafEnabled'                 : require(__dirname + '/plugins/aws/elbv2/elbv2WafEnabled.js'),
 
         'esPublicEndpoint'              : require(__dirname + '/plugins/aws/es/esPublicEndpoint.js'),
+        'esRequireIAMAuth'              : require(__dirname + '/plugins/aws/es/esRequireIAMAuth.js'),
         'esEncryptedDomain'             : require(__dirname + '/plugins/aws/es/esEncryptedDomain.js'),
         'esNodeToNodeEncryption'        : require(__dirname + '/plugins/aws/es/esNodeToNodeEncryption.js'),
         'esLoggingEnabled'              : require(__dirname + '/plugins/aws/es/esLoggingEnabled.js'),
@@ -107,9 +123,11 @@ module.exports = {
         'accessKeysRotated'             : require(__dirname + '/plugins/aws/iam/accessKeysRotated.js'),
         'certificateExpiry'             : require(__dirname + '/plugins/aws/iam/certificateExpiry.js'),
         'emptyGroups'                   : require(__dirname + '/plugins/aws/iam/emptyGroups.js'),
+        'groupInlinePolicies'           : require(__dirname + '/plugins/aws/iam/groupInlinePolicies.js'),
         'iamUserAdmins'                 : require(__dirname + '/plugins/aws/iam/iamUserAdmins.js'),
         'iamUserNameRegex'              : require(__dirname + '/plugins/aws/iam/iamUserNameRegex.js'),
         'iamRolePolicies'               : require(__dirname + '/plugins/aws/iam/iamRolePolicies.js'),
+        'iamRoleLastUsed'               : require(__dirname + '/plugins/aws/iam/iamRoleLastUsed.js'),
         'maxPasswordAge'                : require(__dirname + '/plugins/aws/iam/maxPasswordAge.js'),
         'minPasswordLength'             : require(__dirname + '/plugins/aws/iam/minPasswordLength.js'),
         'noUserIamPolicies'             : require(__dirname + '/plugins/aws/iam/noUserIamPolicies.js'),
@@ -120,6 +138,7 @@ module.exports = {
         'passwordRequiresUppercase'     : require(__dirname + '/plugins/aws/iam/passwordRequiresUppercase.js'),
         'passwordReusePrevention'       : require(__dirname + '/plugins/aws/iam/passwordReusePrevention.js'),
         'rootAccessKeys'                : require(__dirname + '/plugins/aws/iam/rootAccessKeys.js'),
+        'rootSigningCertificate'        : require(__dirname + '/plugins/aws/iam/rootSigningCertificate.js'),
         'rootAccountInUse'              : require(__dirname + '/plugins/aws/iam/rootAccountInUse.js'),
         'rootHardwareMfa'               : require(__dirname + '/plugins/aws/iam/rootHardwareMfa.js'),
         'rootMfaEnabled'                : require(__dirname + '/plugins/aws/iam/rootMfaEnabled.js'),
@@ -142,6 +161,8 @@ module.exports = {
         'rdsRestorable'                 : require(__dirname + '/plugins/aws/rds/rdsRestorable.js'),
         'rdsMultiAz'                    : require(__dirname + '/plugins/aws/rds/rdsMultiAz.js'),
         'rdsSnapshotEncryption'         : require(__dirname + '/plugins/aws/rds/rdsSnapshotEncryption.js'),
+        'rdsMinorVersionUpgrade'        : require(__dirname + '/plugins/aws/rds/rdsMinorVersionUpgrade.js'),
+        'sqlServerTLSVersion'           : require(__dirname + '/plugins/aws/rds/sqlServerTLSVersion'),
 
         'domainAutoRenew'               : require(__dirname + '/plugins/aws/route53/domainAutoRenew.js'),
         'domainExpiry'                  : require(__dirname + '/plugins/aws/route53/domainExpiry.js'),
@@ -174,6 +195,7 @@ module.exports = {
         'lambdaOldRuntimes'             : require(__dirname + '/plugins/aws/lambda/lambdaOldRuntimes.js'),
         'lambdaVpcConfig'               : require(__dirname + '/plugins/aws/lambda/lambdaVpcConfig.js'),
         'lambdaPublicAccess'            : require(__dirname + '/plugins/aws/lambda/lambdaPublicAccess.js'),
+        'lambdaLogGroups'               : require(__dirname + '/plugins/aws/lambda/lambdaLogGroups.js'),
 
         'monitoringMetrics'             : require(__dirname + '/plugins/aws/cloudwatchlogs/monitoringMetrics.js'),
 
@@ -282,6 +304,7 @@ module.exports = {
         'openFTP'                       : require(__dirname + '/plugins/azure/networksecuritygroups/openFTP.js'),
         'openSSH'                       : require(__dirname + '/plugins/azure/networksecuritygroups/openSSH.js'),
         'openCIFS'                      : require(__dirname + '/plugins/azure/networksecuritygroups/openCIFS.js'),
+        'openDocker'                    : require(__dirname + '/plugins/azure/networksecuritygroups/openDocker.js'),
         'openDNS'                       : require(__dirname + '/plugins/azure/networksecuritygroups/openDNS.js'),
         'openRDP'                       : require(__dirname + '/plugins/azure/networksecuritygroups/openRDP.js'),
         'openTelnet'                    : require(__dirname + '/plugins/azure/networksecuritygroups/openTelnet.js'),
@@ -395,10 +418,12 @@ module.exports = {
         'openFTP'                       : require(__dirname + '/plugins/oracle/networking/openFTP.js'),
         'openCIFS'                      : require(__dirname + '/plugins/oracle/networking/openCIFS.js'),
         'openDNS'                       : require(__dirname + '/plugins/oracle/networking/openDNS.js'),
+        'openDocker'                    : require(__dirname + '/plugins/oracle/networking/openDocker.js'),
         'openSQLServer'                 : require(__dirname + '/plugins/oracle/networking/openSQLServer.js'),
         'openHadoopNameNode'            : require(__dirname + '/plugins/oracle/networking/openHadoopNameNode.js'),
         'openHadoopNameNodeWebUI'       : require(__dirname + '/plugins/oracle/networking/openHadoopNameNodeWebUI.js'),
         'openKibana'                    : require(__dirname + '/plugins/oracle/networking/openKibana.js'),
+        'openSalt'                      : require(__dirname + '/plugins/oracle/networking/openSalt.js'),
         'openSMTP'                      : require(__dirname + '/plugins/oracle/networking/openSMTP.js'),
 
         'statelessSecurityRules'        : require(__dirname + '/plugins/oracle/networking/statelessSecurityRules.js'),
@@ -435,6 +460,7 @@ module.exports = {
     google: {
         'excessiveFirewallRules'        : require(__dirname + '/plugins/google/vpcnetwork/excessiveFirewallRules.js'),
         'openDNS'                       : require(__dirname + '/plugins/google/vpcnetwork/openDNS.js'),
+        'openDocker'                    : require(__dirname + '/plugins/google/vpcnetwork/openDocker.js'),
         'openSSH'                       : require(__dirname + '/plugins/google/vpcnetwork/openSSH.js'),
         'openCIFS'                      : require(__dirname + '/plugins/google/vpcnetwork/openCIFS.js'),
         'openAllPorts'                  : require(__dirname + '/plugins/google/vpcnetwork/openAllPorts.js'),
